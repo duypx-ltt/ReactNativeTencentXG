@@ -44,6 +44,7 @@ NSString *const RCTFailureEvent = @"error";
     notification.alertAction = [RCTConvert NSString:details[@"alertAction"]];
     notification.soundName = [RCTConvert NSString:details[@"soundName"]] ?: UILocalNotificationDefaultSoundName;
     notification.userInfo = [RCTConvert NSDictionary:details[@"userInfo"]];
+    notification.alertTitle = [RCTConvert NSString:details[@"title"]];
 //    notification.category = [RCTConvert NSString:details[@"category"]];
     if (details[@"applicationIconBadgeNumber"]) {
         notification.applicationIconBadgeNumber = [RCTConvert NSInteger:details[@"applicationIconBadgeNumber"]];
