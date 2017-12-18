@@ -30,10 +30,10 @@ function scheduleLocalNotification(obj) {
   var hourString = '' + date.getHours();
   var minuteString = '' + date.getMinutes();
   XG.addLocalNotification(obj.title, obj.alertBody, dateString, hourString,
-      minuteString)
+      minuteString, {userInfo: obj.userInfo})
     .then(notificationID => {
-      obj.userInfo = obj.userInfo || {};
-      obj.userInfo.notificationID = notificationID;
+      // obj.userInfo = obj.userInfo || {};
+      // obj.userInfo.notificationID = notificationID;
     });
 }
 

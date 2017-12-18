@@ -1,6 +1,8 @@
 package com.kh.tencentxg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.NotificationManager;
@@ -20,6 +22,10 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.tencent.android.tpush.XGPushManager;
@@ -27,6 +33,8 @@ import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGLocalMessage;
 import com.tencent.android.tpush.XGPushBaseReceiver;
+
+import org.json.JSONObject;
 
 public class TencentXGModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
 
@@ -136,7 +144,7 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
 
     @ReactMethod
     public void addLocalNotification(String title, String content, String date, String hour,
-                                     String minute, Promise promise) {
+                                     String minute, ReadableMap customContent, Promise promise) {
         XGLocalMessage local_msg = new XGLocalMessage();
         local_msg.setType(1);
         local_msg.setTitle(title);
@@ -144,8 +152,72 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
         local_msg.setDate(date);
         local_msg.setHour(hour);
         local_msg.setMin(minute);
+        local_msg.setCustomContent(recursivelyDeconstructReadableMap(customContent));
         long notificationID = XGPushManager.addLocalNotification(this.context, local_msg);
         promise.resolve((int)notificationID);
+    }
+
+    private HashMap<String, Object> recursivelyDeconstructReadableMap(ReadableMap readableMap) {
+        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+        HashMap<String, Object> deconstructedMap = new HashMap<>();
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            ReadableType type = readableMap.getType(key);
+            switch (type) {
+                case Null:
+                    deconstructedMap.put(key, null);
+                    break;
+                case Boolean:
+                    deconstructedMap.put(key, readableMap.getBoolean(key));
+                    break;
+                case Number:
+                    deconstructedMap.put(key, readableMap.getDouble(key));
+                    break;
+                case String:
+                    deconstructedMap.put(key, readableMap.getString(key));
+                    break;
+                case Map:
+                    deconstructedMap.put(key, recursivelyDeconstructReadableMap(readableMap.getMap(key)));
+                    break;
+                case Array:
+                    deconstructedMap.put(key, recursivelyDeconstructReadableArray(readableMap.getArray(key)));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Could not convert object with key: " + key + ".");
+            }
+
+        }
+        return deconstructedMap;
+    }
+
+    private List<Object> recursivelyDeconstructReadableArray(ReadableArray readableArray) {
+        List<Object> deconstructedList = new ArrayList<>(readableArray.size());
+        for (int i = 0; i < readableArray.size(); i++) {
+            ReadableType indexType = readableArray.getType(i);
+            switch(indexType) {
+                case Null:
+                    deconstructedList.add(i, null);
+                    break;
+                case Boolean:
+                    deconstructedList.add(i, readableArray.getBoolean(i));
+                    break;
+                case Number:
+                    deconstructedList.add(i, readableArray.getDouble(i));
+                    break;
+                case String:
+                    deconstructedList.add(i, readableArray.getString(i));
+                    break;
+                case Map:
+                    deconstructedList.add(i, recursivelyDeconstructReadableMap(readableArray.getMap(i)));
+                    break;
+                case Array:
+                    deconstructedList.add(i, recursivelyDeconstructReadableArray(readableArray.getArray(i)));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Could not convert object at index " + i + ".");
+            }
+        }
+        return deconstructedList;
     }
 
     @ReactMethod

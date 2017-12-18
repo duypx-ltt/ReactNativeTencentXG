@@ -24,11 +24,11 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
 
     private static final String LogTag = "[TXG]XG Receiver";
 
-	// 通知展示
-	@Override
-	public void onNotifactionShowedResult(Context context,
-			XGPushShowedResult notifiShowedRlt) {
-		if (context == null || notifiShowedRlt == null) return;
+    // 通知展示
+    @Override
+    public void onNotifactionShowedResult(Context context,
+            XGPushShowedResult notifiShowedRlt) {
+        if (context == null || notifiShowedRlt == null) return;
 
         Log.d(LogTag, "Got notification " + notifiShowedRlt.toString());
 
@@ -44,7 +44,7 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         intent.putExtra("data", payload);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
+    }
 
     @Override
     public void onTextMessage(Context context, XGPushTextMessage message) {
@@ -81,8 +81,8 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-	@Override
-	public void onUnregisterResult(Context context, int errorCode) {
+    @Override
+    public void onUnregisterResult(Context context, int errorCode) {
         if (context == null) return;
         Log.d(LogTag, "Got unregister result " + errorCode);
 
@@ -92,10 +92,10 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         Intent intent = new Intent(MActionUnregister);
         intent.putExtra("data", payload);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
+    }
 
-	@Override
-	public void onSetTagResult(Context context, int errorCode, String tagName) {
+    @Override
+    public void onSetTagResult(Context context, int errorCode, String tagName) {
         if (context == null) return;
         Log.d(LogTag, "Got setting tag result " + errorCode);
 
@@ -106,10 +106,10 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         Intent intent = new Intent(MActionTagSetting);
         intent.putExtra("data", payload);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
+    }
 
-	@Override
-	public void onDeleteTagResult(Context context, int errorCode, String tagName) {
+    @Override
+    public void onDeleteTagResult(Context context, int errorCode, String tagName) {
         if (context == null) return;
         Log.d(LogTag, "Got deleting tag result " + errorCode);
 
@@ -120,11 +120,11 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         Intent intent = new Intent(MActionTagDeleting);
         intent.putExtra("data", payload);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
+    }
 
-	@Override
-	public void onNotifactionClickedResult(Context context,
-			XGPushClickedResult message) {
+    @Override
+    public void onNotifactionClickedResult(Context context,
+            XGPushClickedResult message) {
         if (context == null || message == null) return;
         Log.d(LogTag, "Got message click " + message.toString());
 
@@ -140,6 +140,6 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         Intent intent = new Intent(MActionClickNotification);
         intent.putExtra("data", payload);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
+    }
 
 }
