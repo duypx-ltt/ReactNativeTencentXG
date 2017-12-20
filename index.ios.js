@@ -23,6 +23,7 @@ function eventHandle(event, listener, dataBack) {
       data = {};
       data.alertBody = dataBack.aps.alert;
       data.badge = dataBack.aps.badge;
+      data.tap = dataBack.tap;
       Object.keys(dataBack).filter(k => k !== 'aps')
         .forEach(k => data[k] = dataBack[k]);
     }

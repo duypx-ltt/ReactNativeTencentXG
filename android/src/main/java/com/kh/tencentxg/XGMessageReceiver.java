@@ -123,8 +123,8 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
     }
 
     @Override
-    public void onNotifactionClickedResult(Context context,
-            XGPushClickedResult message) {
+    public void onNotifactionClickedResult(final Context context,
+                                           XGPushClickedResult message) {
         if (context == null || message == null) return;
         Log.d(LogTag, "Got message click " + message.toString());
 
@@ -136,10 +136,19 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
         payload.putLong("NActionType", message.getNotificationActionType());
         payload.putLong("ActionType", message.getActionType());
         payload.putString("ActivityName", message.getActivityName());
+        payload.putBoolean("tap", true);
 
-        Intent intent = new Intent(MActionClickNotification);
+        final Intent intent = new Intent(MActionClickNotification);
         intent.putExtra("data", payload);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        Log.i("tag", "This'll run 300 milliseconds later");
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                    }
+                },
+                5000);
+//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
 }

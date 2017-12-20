@@ -274,7 +274,7 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
 
     public void sendEvent(Intent intent) {
         Bundle payload = intent.getExtras().getBundle("data");
-        WritableMap params;
+        final WritableMap params;
         switch (intent.getAction()) {
             case XGMessageReceiver.MActionNotification:
                 params = Arguments.createMap();
@@ -311,11 +311,11 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
             case XGMessageReceiver.MActionRegistration: {
                 int errorCode = payload.getInt("errorCode");
                 Log.d(LogTag, "Got register result " + payload.toString());
-//                if (errorCode != XGPushBaseReceiver.SUCCESS) {
-//                    sendEvent(RCTFailureEvent, "Fail to set register caused by " + errorCode);
-//                } else {
-//                    sendEvent(RCTRegisteredEvent, payload.getString("Token"));
-//                }
+                if (errorCode != XGPushBaseReceiver.SUCCESS) {
+                    sendEvent(RCTFailureEvent, "Fail to set register caused by " + errorCode);
+                } else {
+                    sendEvent(RCTRegisteredEvent, payload.getString("Token"));
+                }
 
                 break;
             }
@@ -341,8 +341,16 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
             }
 
             case XGMessageReceiver.MActionClickNotification:
+                params = Arguments.createMap();
+                params.putString("Content", payload.getString("Content"));
+                params.putString("Title", payload.getString("Title"));
+                params.putInt("MsgId", (int)payload.getLong("MsgId"));
+                params.putInt("NotificationId", (int)payload.getLong("NotificationId"));
+                params.putInt("NActionType", (int)payload.getLong("NActionType"));
+                params.putString("CustomContent", payload.getString("CustomContent"));
+                params.putBoolean("tap", true);
                 Log.d(LogTag, "Got notification clicking result " + payload.toString());
-//                sendEvent(RCTRegisteredEvent, payload);
+                sendEvent(RCTRemoteNotificationEvent, params);
                 break;
         }
     }

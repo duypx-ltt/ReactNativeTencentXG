@@ -324,6 +324,12 @@ RCT_EXPORT_METHOD(unRegisterDevice)
     if (notification.userInfo) {
         details[@"userInfo"] = RCTJSONClean(notification.userInfo);
     }
+    
+    //    details[@"tap"] = [NSNumber numberWithBool:YES];
+    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive)
+    {
+        details[@"tap"] = [NSNumber numberWithBool:YES];
+    }
 
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTRemoteNotificationReceived
                                                         object:self
