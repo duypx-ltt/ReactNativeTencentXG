@@ -25,8 +25,9 @@ function register(account, ticket, ticketType, qua) {
 
 function scheduleLocalNotification(obj) {
   var date = new Date(obj.fireDate || Date.now());
-  var dateString = '' + date.getFullYear() + (date.getMonth() + 1) +
-    date.getDate();
+  const dateMonthStr = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+  const dateDayStr = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+  var dateString = '' + date.getFullYear() + dateMonthStr + dateDayStr;
   var hourString = '' + date.getHours();
   var minuteString = '' + date.getMinutes();
   XG.addLocalNotification(obj.title, obj.alertBody, dateString, hourString,
