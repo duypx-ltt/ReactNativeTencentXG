@@ -44,6 +44,9 @@ function eventHandle(event, listener, dataBack) {
     data = {};
     data.alertBody = dataBack.Content;
     data.title = dataBack.Title;
+    if (dataBack.tap) {
+      data.tap = dataBack.tap;
+    }
     if (dataBack.CustomContent)
       Object.assign(data, JSON.parse(dataBack.CustomContent));
   }

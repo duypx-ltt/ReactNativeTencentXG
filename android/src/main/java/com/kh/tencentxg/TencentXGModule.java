@@ -229,9 +229,10 @@ public class TencentXGModule extends ReactContextBaseJavaModule implements Lifec
 
     @ReactMethod
     public void cancelAllLocalNotifications() {
-        NotificationManager notificationManager =
-                (NotificationManager) this.reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+//        NotificationManager notificationManager =
+//                (NotificationManager) this.reactContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.cancelAll();
+        XGPushManager.cancelAllNotifaction(this.context);
     }
 
     // XGPushConfig

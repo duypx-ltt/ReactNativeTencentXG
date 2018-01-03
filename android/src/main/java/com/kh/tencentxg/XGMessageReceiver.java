@@ -24,13 +24,15 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
 
     private static final String LogTag = "[TXG]XG Receiver";
 
+    public static Intent mIntent;
+
     // 通知展示
     @Override
     public void onNotifactionShowedResult(Context context,
             XGPushShowedResult notifiShowedRlt) {
         if (context == null || notifiShowedRlt == null) return;
 
-        Log.d(LogTag, "Got notification " + notifiShowedRlt.toString());
+        Log.d(LogTag, "Got notification2 " + notifiShowedRlt.toString());
 
         Bundle payload = new Bundle();
         payload.putString("Content", notifiShowedRlt.getContent());
@@ -140,15 +142,8 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
 
         final Intent intent = new Intent(MActionClickNotification);
         intent.putExtra("data", payload);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        Log.i("tag", "This'll run 300 milliseconds later");
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    }
-                },
-                5000);
-//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        mIntent = intent;
+        LocalBroadcastManager.getInstance(context).sendBroadcast(XGMessageReceiver.mIntent);
     }
 
 }
