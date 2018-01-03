@@ -16,7 +16,7 @@
 + (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 + (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
 + (void)didReceiveRemoteNotification:(NSDictionary *)notification;
-+ (void)didReceiveLocalNotification:(UILocalNotification *)notification;
++ (void)didReceiveLocalNotification:(UILocalNotification *)notification tap:(BOOL)tap;
 
 @property NSString* account;
 
