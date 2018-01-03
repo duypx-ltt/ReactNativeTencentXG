@@ -314,7 +314,7 @@ RCT_EXPORT_METHOD(unRegisterDevice)
                                                  body:notification.userInfo];
 }
 
-+ (void)didReceiveLocalNotification:(UILocalNotification *)notification
++ (void)didReceiveLocalNotification:(UILocalNotification *)notification tap:(BOOL)tap
 {
     NSMutableDictionary *details = [NSMutableDictionary new];
     if (notification.alertBody) {
@@ -326,10 +326,8 @@ RCT_EXPORT_METHOD(unRegisterDevice)
     }
     
     //    details[@"tap"] = [NSNumber numberWithBool:YES];
-    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive)
-    {
-        details[@"tap"] = [NSNumber numberWithBool:YES];
-    }
+        details[@"tap"] = [NSNumber numberWithBool:tap];
+
 
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTRemoteNotificationReceived
                                                         object:self
