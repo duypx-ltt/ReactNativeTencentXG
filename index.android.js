@@ -31,7 +31,7 @@ function scheduleLocalNotification(obj) {
   var hourString = '' + date.getHours();
   var minuteString = '' + date.getMinutes();
   XG.addLocalNotification(obj.title, obj.alertBody, dateString, hourString,
-      minuteString, {userInfo: obj.userInfo})
+      minuteString, obj.userInfo)
     .then(notificationID => {
       // obj.userInfo = obj.userInfo || {};
       // obj.userInfo.notificationID = notificationID;
@@ -41,6 +41,7 @@ function scheduleLocalNotification(obj) {
 function eventHandle(event, listener, dataBack) {
   var data = dataBack;
   if (event === XG.RemoteNotificationEvent) {
+    console.log(dataBack);
     data = {};
     data.alertBody = dataBack.Content;
     data.title = dataBack.Title;
@@ -48,7 +49,8 @@ function eventHandle(event, listener, dataBack) {
       data.tap = dataBack.tap;
     }
     if (dataBack.CustomContent)
-      Object.assign(data, JSON.parse(dataBack.CustomContent));
+      // Object.assign(data, JSON.parse(dataBack.CustomContent));
+      data.userInfo = JSON.parse(dataBack.CustomContent);
   }
 
   listener(data);

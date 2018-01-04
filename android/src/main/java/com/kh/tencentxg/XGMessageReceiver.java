@@ -32,7 +32,7 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
             XGPushShowedResult notifiShowedRlt) {
         if (context == null || notifiShowedRlt == null) return;
 
-        Log.d(LogTag, "Got notification2 " + notifiShowedRlt.toString());
+        Log.d(LogTag, "Got notification " + notifiShowedRlt.toString());
 
         Bundle payload = new Bundle();
         payload.putString("Content", notifiShowedRlt.getContent());
