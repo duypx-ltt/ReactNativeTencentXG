@@ -301,11 +301,23 @@ RCT_EXPORT_METHOD(unRegisterDevice)
                                                  body:notification.userInfo];
 }
 
-+ (void)didReceiveRemoteNotification:(NSDictionary*)notification
++ (void)didReceiveRemoteNotification:(NSDictionary*)notification tap:(BOOL)tap
 {
+    NSMutableDictionary *details = [NSMutableDictionary new];
+//    if (notification.aps) {
+    NSDictionary *aps = [notification objectForKey:@"aps"];
+    details[@"alertBody"] = [aps objectForKey:@"alert"];
+//    }
+    
+
+    details[@"userInfo"] = RCTJSONClean(notification);
+    
+    //    details[@"tap"] = [NSNumber numberWithBool:YES];
+    details[@"tap"] = [NSNumber numberWithBool:tap];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:RCTRemoteNotificationReceived
                                                         object:self
-                                                      userInfo:notification];
+                                                      userInfo:details];
 }
 
 - (void)handleRemoteNotificationReceived:(NSNotification *)notification
